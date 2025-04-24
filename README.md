@@ -1,0 +1,2 @@
+# weather-app-project
+A simple weather app using OpenWeather API
