@@ -1,0 +1,74 @@
+import 'package:flutter/material.dart';
+import 'dart:math';
+
+void main() {
+  runApp(BMICalculator());
+}
+
+class BMICalculator extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: BMIHome(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class BMIHome extends StatefulWidget {
+  @override
+  _BMIHomeState createState() => _BMIHomeState();
+}
+
+class _BMIHomeState extends State<BMIHome> {
+  TextEditingController heightController = TextEditingController();
+  TextEditingController weightController = TextEditingController();
+  String result = "";
+
+  void calculateBMI() {
+    double height = double.parse(heightController.text) / 100;
+    double weight = double.parse(weightController.text);
+    double bmi = weight / pow(height, 2);
+    String status = "";
+
+    if (bmi < 18.5) status = "Underweight";
+    else if (bmi < 24.9) status = "Normal";
+    else if (bmi < 29.9) status = "Overweight";
+    else status = "Obese";
+
+    setState(() {
+      result = "BMI: ${bmi.toStringAsFixed(2)}\nStatus: $status";
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("BMI Calculator")),
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          children: [
+            TextField(
+              controller: heightController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: "Height in cm"),
+            ),
+            TextField(
+              controller: weightController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: "Weight in kg"),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: calculateBMI,
+              child: Text("Calculate BMI"),
+            ),
+            SizedBox(height: 20),
+            Text(result, style: TextStyle(fontSize: 20)),
+          ],
+        ),
+      ),
+    );
+  }
+}
