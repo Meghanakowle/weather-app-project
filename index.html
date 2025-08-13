@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #83a4d4, #b6fbff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      color: #333333;
+    }
+
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      margin: 5px;
+    }
+
+    button {
+      background-color: #3cff00;
+      color: rgb(81, 15, 233);
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #00b395;
+    }
+
+    .weather-info {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #222;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(161, 8, 192, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>Weather App</h1>
+  <input type="text" id="locationInput" placeholder="Enter location (e.g. London)" />
+  <button onclick="getWeather()">Get Weather</button>
+  <div class="weather-info" id="weatherInfo"></div>
+
+  <script>
+    async function getWeather() {
+      const location = document.getElementById('locationInput').value;
+      const apiKey = 'c92f7dd6a76344d4b7171807252304';
+      const url = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=yes`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Location not found');
+        const data = await response.json();
+
+        const weatherDiv = document.getElementById('weatherInfo');
+        weatherDiv.innerHTML = `
+          <strong>Location:</strong> ${data.location.name}, ${data.location.country}<br/>
+          <strong>Temperature:</strong> ${data.current.temp_c}°C<br/>
+          <strong>Condition:</strong> ${data.current.condition.text}<br/>
+          <img src="${data.current.condition.icon}" alt="Weather icon" />
+        `;
+      } catch (error) {
+        document.getElementById('weatherInfo').innerHTML = `Error: ${error.message}`;
+      }
+    }
+  </script>
+</body>
+</html>
+
